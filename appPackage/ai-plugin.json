@@ -95,7 +95,7 @@
                 "reference_id": "${{OAUTH2_REGISTRATION_ID}}"
             },
             "spec": {
-                "url": "apiSpecificationFile/openapi.yaml"
+                "url": "${{OPENAPI_URL:apiSpecificationFile/openapi.yaml}}"
             },
             "run_for_functions": [
                 "listIncidents",

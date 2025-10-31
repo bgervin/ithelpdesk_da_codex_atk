@@ -6,8 +6,13 @@ appPackage/build
 
 # dependencies
 node_modules/
+package-lock.json
 
 # misc
 .env
 .deployment
 .DS_Store
+
+# Generated files
+examples/
+appPackage/apiSpecificationFile/openapi.local.yaml
