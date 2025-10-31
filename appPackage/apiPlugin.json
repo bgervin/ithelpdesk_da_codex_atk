@@ -1,0 +1,87 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/copilot/plugin/v2.2/schema.json",
+  "schema_version": "v2.2",
+  "name_for_human": "ServiceNow Incident Management",
+  "description_for_human": "Manage ServiceNow incidents including create, update, close, and list operations",
+  "namespace": "servicenow",
+  "functions": [
+    {
+      "name": "listMyTickets",
+      "description": "Retrieve a list of incidents assigned to or created by the current user",
+      "capabilities": {
+        "response_semantics": {
+          "data_path": "$.result",
+          "properties": {
+            "title": "$.number",
+            "subtitle": "$.short_description"
+          }
+        }
+      }
+    },
+    {
+      "name": "createTicket",
+      "description": "Create a new ServiceNow incident (ticket)",
+      "capabilities": {
+        "confirmation": {
+          "type": "AdaptiveCard",
+          "title": "Create ServiceNow Ticket",
+          "body": "Create incident with description: **{{short_description}}**?"
+        }
+      }
+    },
+    {
+      "name": "getTicket",
+      "description": "Retrieve details of a specific incident",
+      "capabilities": {
+        "response_semantics": {
+          "data_path": "$.result",
+          "properties": {
+            "title": "$.number",
+            "subtitle": "$.short_description"
+          }
+        }
+      }
+    },
+    {
+      "name": "updateTicket",
+      "description": "Update an existing ServiceNow incident",
+      "capabilities": {
+        "confirmation": {
+          "type": "AdaptiveCard",
+          "title": "Update ServiceNow Ticket",
+          "body": "Update incident **{{sys_id}}**?"
+        }
+      }
+    },
+    {
+      "name": "closeTicket",
+      "description": "Close a ServiceNow incident by setting its state to Resolved (6) or Closed (7)",
+      "capabilities": {
+        "confirmation": {
+          "type": "AdaptiveCard",
+          "title": "Close ServiceNow Ticket",
+          "body": "Close incident **{{sys_id}}**?"
+        }
+      }
+    }
+  ],
+  "runtimes": [
+    {
+      "type": "OpenApi",
+      "auth": {
+        "type": "OAuthPluginVault",
+        "reference_id": "${{SERVICENOW_OAUTH_CONFIG_ID}}"
+      },
+      "spec": {
+        "url": "servicenow-openapi.yaml"
+      },
+      "run_for_functions": [
+        "listMyTickets",
+        "createTicket",
+        "getTicket",
+        "updateTicket",
+        "closeTicket"
+      ]
+    }
+  ]
+}

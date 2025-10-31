@@ -4,7 +4,7 @@ info:
   description: API for managing ServiceNow incidents (tickets) including create, update, close, and list operations
   version: 1.0.0
 servers:
-  - url: https://{instance}.service-now.com/api/now
+  - url: https://dev12345.service-now.com/api/now
     description: ServiceNow Instance
     variables:
       instance:
@@ -255,8 +255,8 @@ components:
       type: oauth2
       flows:
         authorizationCode:
-          authorizationUrl: https://{instance}.service-now.com/oauth_auth.do
-          tokenUrl: https://{instance}.service-now.com/oauth_token.do
+          authorizationUrl: https://dev12345.service-now.com/oauth_auth.do
+          tokenUrl: https://dev12345.service-now.com/oauth_token.do
           scopes:
             useraccount: Access user account and incident data
   schemas:

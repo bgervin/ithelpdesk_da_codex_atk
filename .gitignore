@@ -1,7 +1,8 @@
 # Environment variables and secrets
 .env
-.env.local
-.env.*.local
+.env.*
+!.env.sample
+env/.env.*
 
 # Node modules
 node_modules/
@@ -12,6 +13,7 @@ yarn-error.log*
 # Build artifacts
 dist/
 build/
+appPackage/build/
 *.zip
 
 # IDE and editor files
@@ -25,7 +27,6 @@ build/
 # Teams Toolkit
 .fx/
 .localConfigs
-env/.env.*
 
 # Temporary files
 tmp/
@@ -35,13 +36,6 @@ temp/
 # Logs
 logs/
 *.log
-
-# App package (generated)
-*.zip
-
-# Actual icon files (keep placeholders)
-appPackage/color.png
-appPackage/outline.png
 
 # OS files
 Thumbs.db
