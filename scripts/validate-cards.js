@@ -33,9 +33,22 @@ cardFiles.forEach(file => {
   const filePath = path.join(cardsDir, file);
   console.log(`📄 Validating ${file}...`);
   
+  let card;
   try {
     const content = fs.readFileSync(filePath, 'utf8');
-    const card = JSON.parse(content);
+    card = JSON.parse(content);
+  } catch (error) {
+    if (error instanceof SyntaxError) {
+      console.error(`  ❌ JSON parse error in ${file}:`, error.message);
+    } else {
+      console.error(`  ❌ Error reading ${file}:`, error.message);
+    }
+    allValid = false;
+    console.log();
+    return;
+  }
+  
+  try {
     
     // Basic validation checks
     const checks = [
@@ -88,7 +101,7 @@ cardFiles.forEach(file => {
     }
     
   } catch (error) {
-    console.error(`  ❌ Error parsing ${file}:`, error.message);
+    console.error(`  ❌ Unexpected error validating ${file}:`, error.message);
     allValid = false;
     console.log();
   }

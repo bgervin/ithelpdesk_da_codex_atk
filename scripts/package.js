@@ -93,7 +93,10 @@ try {
     });
   }
 
-  const zipCommand = `cd "${rootDir}" && zip -r "${outputFile}" ${filesToZip.join(' ')}`;
+  // Note: For production use, consider using the 'archiver' npm package for more robust zip creation
+  // This approach works for standard file paths but may have issues with special characters
+  const filesArg = filesToZip.map(f => `"${f}"`).join(' ');
+  const zipCommand = `cd "${rootDir}" && zip -r "${outputFile}" ${filesArg}`;
   execSync(zipCommand, { stdio: 'inherit' });
 
   console.log('\n✅ Package created successfully!');

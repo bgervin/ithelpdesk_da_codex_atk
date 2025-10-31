@@ -22,7 +22,7 @@ paths:
       parameters:
         - name: sysparm_query
           in: query
-          description: Query filter (e.g., assigned_to=javascript:gs.getUserID()^ORopened_by=javascript:gs.getUserID())
+          description: Query filter using ServiceNow's server-side scripting syntax (e.g., assigned_to=javascript:gs.getUserID()^ORopened_by=javascript:gs.getUserID())
           required: false
           schema:
             type: string

@@ -17,7 +17,13 @@ if (!fs.existsSync(openapiFile)) {
   process.exit(1);
 }
 
-const yaml = fs.readFileSync(openapiFile, 'utf8');
+let yaml;
+try {
+  yaml = fs.readFileSync(openapiFile, 'utf8');
+} catch (error) {
+  console.error('❌ Error reading OpenAPI file:', error.message);
+  process.exit(1);
+}
 
 // Basic validation checks
 const checks = [
