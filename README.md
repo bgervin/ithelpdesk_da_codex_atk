@@ -32,7 +32,7 @@ The solution consists of:
 - Node.js 18.x or higher
 - npm 9.x or higher
 - M365 Agent Toolkit CLI
-- ServiceNow instance with OAuth configured
+- ServiceNow instance with OAuth configured (for production)
 - Microsoft 365 tenant with Copilot license
 
 ### Installation
@@ -48,16 +48,93 @@ The solution consists of:
    cd ithelpdesk_da_codex_atk
    \`\`\`
 
-3. **Configure environment variables**
+3. **Install dependencies**
    \`\`\`bash
-   cp .env.example env/.env.dev
-   # Edit env/.env.dev with your ServiceNow and Azure credentials
+   npm install
    \`\`\`
 
-4. **Preview the agent locally**
+4. **Configure environment variables**
    \`\`\`bash
-   atk preview --env dev
+   cp .env.example .env
+   # Edit .env with your ServiceNow instance name and credentials
    \`\`\`
+
+### Local Development with Prism Mock Server
+
+For local development and testing without a live ServiceNow instance, you can use the Prism mock server:
+
+#### Option 1: One-Click F5 in VS Code
+
+1. Open the project in VS Code
+2. Ensure your \`.env\` file is configured with the following variables:
+   \`\`\`bash
+   API_HOST=localhost
+   API_PORT=4010
+   SPEC_SERVER_PORT=8081
+   OPENAPI_URL=http://localhost:8081/openapi.local.yaml
+   SERVICENOW_INSTANCE=your-instance
+   \`\`\`
+3. Press **F5** or select **"Launch Agent + Prism"** from the debug menu
+
+This will automatically:
+- Generate a localized OpenAPI spec (`.tmp/openapi.local.yaml`)
+- Convert any CSV files in `data/` to JSON examples
+- Start the Prism mock server on `http://localhost:4010`
+- Start a static file server for the OpenAPI spec on `http://localhost:8081`
+- Launch the agent with the local configuration
+
+#### Option 2: Manual Commands
+
+Run these commands in separate terminal windows:
+
+1. **Generate local OpenAPI spec**
+   \`\`\`bash
+   npm run spec:local
+   \`\`\`
+
+2. **Seed example data from CSV**
+   \`\`\`bash
+   npm run seed:examples
+   \`\`\`
+
+3. **Start Prism mock server**
+   \`\`\`bash
+   npm run mock:start
+   \`\`\`
+
+4. **Start OpenAPI spec server**
+   \`\`\`bash
+   npm run spec:serve
+   \`\`\`
+
+5. **Preview the agent**
+   \`\`\`bash
+   atk preview --env local
+   \`\`\`
+
+#### Adding Sample Data
+
+To add sample incident data for local testing:
+
+1. Create CSV files in the `data/` directory (e.g., `data/incidents.csv`)
+2. Run `npm run seed:examples` to convert them to JSON in the `examples/` directory
+3. The generated JSON files follow the ServiceNow response format: `{ result: [...] }`
+
+Example CSV format:
+\`\`\`csv
+sys_id,number,short_description,description,state,priority,urgency
+001,INC0010001,VPN issue,Cannot connect to VPN,2,2,2
+\`\`\`
+
+### Production Preview
+
+To preview the agent with a live ServiceNow instance:
+
+\`\`\`bash
+cp .env.example env/.env.dev
+# Edit env/.env.dev with your ServiceNow and Azure credentials
+atk preview --env dev
+\`\`\`
 
 The agent will be available in Microsoft Teams for testing.
 

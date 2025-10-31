@@ -4,5 +4,76 @@
 {
     "version": "2.0.0",
     "tasks": [
+        {
+            "label": "spec:local",
+            "type": "npm",
+            "script": "spec:local",
+            "options": { 
+                "env": { 
+                    "API_HOST": "${env:API_HOST}",
+                    "API_PORT": "${env:API_PORT}"
+                }
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "seed:examples",
+            "type": "npm",
+            "script": "seed:examples",
+            "problemMatcher": []
+        },
+        {
+            "label": "mock:start",
+            "type": "npm",
+            "script": "mock:start",
+            "isBackground": true,
+            "problemMatcher": [
+                {
+                    "pattern": [{ "regexp": ".*" }],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".*(Starting Prism|start).*",
+                        "endsPattern": ".*(Listening on|Prism is listening|listening).*"
+                    }
+                }
+            ],
+            "options": { 
+                "env": { 
+                    "API_PORT": "${env:API_PORT}"
+                }
+            }
+        },
+        {
+            "label": "spec:serve",
+            "type": "npm",
+            "script": "spec:serve",
+            "isBackground": true,
+            "problemMatcher": [
+                {
+                    "pattern": [{ "regexp": ".*" }],
+                    "background": {
+                        "activeOnStart": true,
+                        "beginsPattern": ".*(Starting up|Available on).*",
+                        "endsPattern": ".*(Hit CTRL-C to stop|available).*"
+                    }
+                }
+            ],
+            "options": { 
+                "env": { 
+                    "SPEC_SERVER_PORT": "${env:SPEC_SERVER_PORT}"
+                }
+            }
+        },
+        {
+            "label": "start-local-dev",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "spec:local",
+                "seed:examples",
+                "mock:start",
+                "spec:serve"
+            ],
+            "problemMatcher": []
+        }
     ]
 }

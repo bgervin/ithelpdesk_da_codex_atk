@@ -30,6 +30,23 @@
                 "--remote-debugging-port=9225",
                 "--no-first-run"
             ]
+        },
+        {
+            "name": "Launch Agent + Prism",
+            "type": "node",
+            "request": "launch",
+            "program": "${workspaceFolder}/node_modules/.bin/atk",
+            "args": ["preview", "--env", "local"],
+            "cwd": "${workspaceFolder}",
+            "env": {
+                "OPENAPI_URL": "http://localhost:${env:SPEC_SERVER_PORT}/openapi.local.yaml",
+                "API_HOST": "${env:API_HOST}",
+                "API_PORT": "${env:API_PORT}",
+                "SPEC_SERVER_PORT": "${env:SPEC_SERVER_PORT}",
+                "SERVICENOW_INSTANCE": "${env:SERVICENOW_INSTANCE}",
+                "SERVICENOW_BASE_URL_PROD": "${env:SERVICENOW_BASE_URL_PROD}"
+            },
+            "preLaunchTask": "start-local-dev"
         }
     ],
     "compounds": [
