@@ -1,42 +1,13 @@
-# Environment variables and secrets
-.env
-.env.*
-!.env.sample
-env/.env.*
-
-# Node modules
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# Build artifacts
-dist/
-build/
-appPackage/build/
-*.zip
-
-# IDE and editor files
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-.DS_Store
-
-# Teams Toolkit
-.fx/
+# TeamsFx files
+env/.env.*.user
+env/.env.local
 .localConfigs
+appPackage/build
 
-# Temporary files
-tmp/
-temp/
-*.tmp
+# dependencies
+node_modules/
 
-# Logs
-logs/
-*.log
-
-# OS files
-Thumbs.db
+# misc
+.env
+.deployment
 .DS_Store

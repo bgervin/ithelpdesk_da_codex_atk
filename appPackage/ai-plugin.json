@@ -1,0 +1,101 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/copilot/plugin/v2.1/schema.json",
+    "schema_version": "v2.1",
+    "name_for_human": "ServiceNow Incident Management API",
+    "description_for_human": "API for managing ServiceNow incidents (tickets) including create, update, close, and list operations",
+    "description_for_model": "API for managing ServiceNow incidents (tickets) including create, update, close, and list operations",
+    "contact_email": "publisher-email@example.com",
+    "namespace": "ithelpdeskagent",
+    "capabilities": {
+        "conversation_starters": [
+            {
+                "text": "List my incidents"
+            },
+            {
+                "text": "Create a new incident"
+            },
+            {
+                "text": "Get incident details"
+            },
+            {
+                "text": "Update an incident"
+            },
+            {
+                "text": "Close an incident"
+            }
+        ]
+    },
+    "functions": [
+        {
+            "name": "closeTicket",
+            "description": "Close a ServiceNow incident by setting its state to Resolved (6) or Closed (7)",
+            "capabilities": {
+                "response_semantics": {
+                    "data_path": "$",
+                    "static_template": {
+                        "file": "./adaptiveCards/closeTicket.json"
+                    }
+                }
+            }
+        },
+        {
+            "name": "createTicket",
+            "description": "Create a new ServiceNow incident (ticket)"
+        },
+        {
+            "name": "getTicket",
+            "description": "Retrieve details of a specific incident",
+            "capabilities": {
+                "response_semantics": {
+                    "data_path": "$",
+                    "static_template": {
+                        "file": "./adaptiveCards/getTicket.json"
+                    }
+                }
+            }
+        },
+        {
+            "name": "listMyTickets",
+            "description": "Retrieve a list of incidents assigned to or created by the current user",
+            "capabilities": {
+                "response_semantics": {
+                    "data_path": "$",
+                    "static_template": {
+                        "file": "./adaptiveCards/listMyTickets.json"
+                    }
+                }
+            }
+        },
+        {
+            "name": "updateTicket",
+            "description": "Update an existing ServiceNow incident",
+            "capabilities": {
+                "response_semantics": {
+                    "data_path": "$",
+                    "static_template": {
+                        "file": "./adaptiveCards/updateTicket.json"
+                    }
+                }
+            }
+        }
+    ],
+    "runtimes": [
+        {
+            "type": "OpenApi",
+            "auth": {
+                "type": "OAuthPluginVault",
+                "reference_id": "${{OAUTH2_REGISTRATION_ID}}"
+            },
+            "spec": {
+                "url": "apiSpecificationFile/openapi.yaml"
+            },
+            "run_for_functions": [
+                "listMyTickets",
+                "createTicket",
+                "getTicket",
+                "updateTicket",
+                "closeTicket"
+            ]
+        }
+    ]
+}

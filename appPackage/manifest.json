@@ -22,11 +22,6 @@
         "full": "An intelligent IT helpdesk assistant that helps manage ServiceNow tickets, answer common support questions, and streamline IT support workflows through M365 Copilot."
     },
     "accentColor": "#FFFFFF",
-    "composeExtensions": [],
-    "permissions": [
-        "identity",
-        "messageTeamMembers"
-    ],
     "copilotAgents": {
         "declarativeAgents": [            
             {
@@ -35,6 +30,10 @@
             }
         ]
     },
+    "permissions": [
+        "identity",
+        "messageTeamMembers"
+    ],
     "validDomains": [
         "*.service-now.com"
     ]

@@ -4,37 +4,27 @@
     "name": "IT Helpdesk Agent${{APP_NAME_SUFFIX}}",
     "description": "An intelligent IT helpdesk assistant that helps you manage ServiceNow tickets, answer common support questions, and streamline IT support workflows.",
     "instructions": "$[file('instruction.txt')]",
-    "conversation_starters": [
-        {
-            "title": "Create a new ticket",
-            "text": "I need to report an IT issue"
-        },
-        {
-            "title": "List my tickets",
-            "text": "Show me my open tickets"
-        },
-        {
-            "title": "Update a ticket",
-            "text": "I want to update ticket status"
-        },
-        {
-            "title": "Common IT issues",
-            "text": "Help me troubleshoot a common problem"
-        }
-    ],
-    "capabilities": [
-        {
-            "name": "WebSearch"
-        },
-        {
-            "name": "Actions",
-            "id": "servicenowActions"
-        }
-    ],
     "actions": [
         {
-            "id": "servicenowActions",
-            "file": "apiPlugin.json"
+            "id": "action_1",
+            "file": "ai-plugin.json"
+        }
+    ],
+    "conversation_starters": [
+        {
+            "text": "List my incidents"
+        },
+        {
+            "text": "Create a new incident"
+        },
+        {
+            "text": "Get incident details"
+        },
+        {
+            "text": "Update an incident"
+        },
+        {
+            "text": "Close an incident"
         }
     ]
 }

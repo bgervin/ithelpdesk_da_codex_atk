@@ -1,0 +1,587 @@
+openapi: 3.0.4
+info:
+  title: ServiceNow Incident Management API - Subset
+  description: 'API for managing ServiceNow incidents (tickets) including create, update, close, and list operations'
+  version: 1.0.0
+servers:
+  - url: https://dev12345.service-now.com/api/now
+    description: ServiceNow Instance
+    variables:
+      instance:
+        default: dev12345
+        description: Your ServiceNow instance name
+paths:
+  /table/incident:
+    get:
+      summary: List my incidents
+      description: Retrieve a list of incidents assigned to or created by the current user
+      operationId: listMyTickets
+      parameters:
+        - name: sysparm_query
+          in: query
+          description: 'Query filter using ServiceNow''s server-side scripting syntax (e.g., assigned_to=javascript:gs.getUserID()^ORopened_by=javascript:gs.getUserID())'
+          explode: false
+          schema:
+            type: string
+        - name: sysparm_limit
+          in: query
+          description: Maximum number of records to return
+          explode: false
+          schema:
+            type: integer
+            default: 10
+        - name: sysparm_fields
+          in: query
+          description: Comma-separated list of fields to return
+          explode: false
+          schema:
+            type: string
+            default: 'sys_id,number,short_description,state,priority,urgency,assigned_to,opened_at,updated_at'
+      responses:
+        '200':
+          description: List of incidents
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        sys_id:
+                          type: string
+                          description: Unique system identifier
+                        number:
+                          type: string
+                          description: 'Incident number (e.g., INC0010001)'
+                        short_description:
+                          type: string
+                          description: Brief description of the incident
+                        description:
+                          type: string
+                          description: Detailed description of the incident
+                        state:
+                          type: string
+                          description: 'Current state (1=New, 2=In Progress, 3=On Hold, 6=Resolved, 7=Closed)'
+                        urgency:
+                          type: string
+                          description: 'Urgency level (1=High, 2=Medium, 3=Low)'
+                        priority:
+                          type: string
+                          description: 'Priority level (1=Critical, 2=High, 3=Moderate, 4=Low, 5=Planning)'
+                        impact:
+                          type: string
+                          description: 'Impact level (1=High, 2=Medium, 3=Low)'
+                        category:
+                          type: string
+                          description: Incident category
+                        subcategory:
+                          type: string
+                          description: Incident subcategory
+                        assigned_to:
+                          type: object
+                          properties:
+                            link:
+                              type: string
+                            value:
+                              type: string
+                          description: User assigned to the incident
+                        opened_by:
+                          type: object
+                          properties:
+                            link:
+                              type: string
+                            value:
+                              type: string
+                          description: User who opened the incident
+                        opened_at:
+                          type: string
+                          description: Timestamp when incident was opened
+                          format: date-time
+                        updated_at:
+                          type: string
+                          description: Timestamp of last update
+                          format: date-time
+                        closed_at:
+                          type: string
+                          description: Timestamp when incident was closed
+                          format: date-time
+                        work_notes:
+                          type: string
+                          description: Work notes on the incident
+                        close_notes:
+                          type: string
+                          description: Notes about the closure
+    post:
+      summary: Create a new incident
+      description: Create a new ServiceNow incident (ticket)
+      operationId: createTicket
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - short_description
+              type: object
+              properties:
+                short_description:
+                  type: string
+                  description: Brief description of the incident
+                  example: Unable to access email
+                description:
+                  type: string
+                  description: Detailed description of the incident
+                  example: I cannot log into my Outlook email account. Getting 'authentication failed' error.
+                urgency:
+                  enum:
+                    - '1'
+                    - '2'
+                    - '3'
+                  type: string
+                  description: Urgency level
+                  default: '3'
+                  example: '2'
+                priority:
+                  enum:
+                    - '1'
+                    - '2'
+                    - '3'
+                    - '4'
+                    - '5'
+                  type: string
+                  description: Priority level
+                  default: '4'
+                  example: '3'
+                category:
+                  type: string
+                  description: Incident category
+                  example: Software
+                subcategory:
+                  type: string
+                  description: Incident subcategory
+                  example: Email
+                impact:
+                  enum:
+                    - '1'
+                    - '2'
+                    - '3'
+                  type: string
+                  description: Impact level
+                  default: '3'
+                  example: '2'
+        required: true
+      responses:
+        '201':
+          description: Incident created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    properties:
+                      sys_id:
+                        type: string
+                        description: Unique system identifier
+                      number:
+                        type: string
+                        description: 'Incident number (e.g., INC0010001)'
+                      short_description:
+                        type: string
+                        description: Brief description of the incident
+                      description:
+                        type: string
+                        description: Detailed description of the incident
+                      state:
+                        type: string
+                        description: 'Current state (1=New, 2=In Progress, 3=On Hold, 6=Resolved, 7=Closed)'
+                      urgency:
+                        type: string
+                        description: 'Urgency level (1=High, 2=Medium, 3=Low)'
+                      priority:
+                        type: string
+                        description: 'Priority level (1=Critical, 2=High, 3=Moderate, 4=Low, 5=Planning)'
+                      impact:
+                        type: string
+                        description: 'Impact level (1=High, 2=Medium, 3=Low)'
+                      category:
+                        type: string
+                        description: Incident category
+                      subcategory:
+                        type: string
+                        description: Incident subcategory
+                      assigned_to:
+                        type: object
+                        properties:
+                          link:
+                            type: string
+                          value:
+                            type: string
+                        description: User assigned to the incident
+                      opened_by:
+                        type: object
+                        properties:
+                          link:
+                            type: string
+                          value:
+                            type: string
+                        description: User who opened the incident
+                      opened_at:
+                        type: string
+                        description: Timestamp when incident was opened
+                        format: date-time
+                      updated_at:
+                        type: string
+                        description: Timestamp of last update
+                        format: date-time
+                      closed_at:
+                        type: string
+                        description: Timestamp when incident was closed
+                        format: date-time
+                      work_notes:
+                        type: string
+                        description: Work notes on the incident
+                      close_notes:
+                        type: string
+                        description: Notes about the closure
+  '/table/incident/{sys_id}':
+    get:
+      summary: Get incident details
+      description: Retrieve details of a specific incident
+      operationId: getTicket
+      parameters:
+        - name: sys_id
+          in: path
+          description: System ID of the incident
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Incident details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    properties:
+                      sys_id:
+                        type: string
+                        description: Unique system identifier
+                      number:
+                        type: string
+                        description: 'Incident number (e.g., INC0010001)'
+                      short_description:
+                        type: string
+                        description: Brief description of the incident
+                      description:
+                        type: string
+                        description: Detailed description of the incident
+                      state:
+                        type: string
+                        description: 'Current state (1=New, 2=In Progress, 3=On Hold, 6=Resolved, 7=Closed)'
+                      urgency:
+                        type: string
+                        description: 'Urgency level (1=High, 2=Medium, 3=Low)'
+                      priority:
+                        type: string
+                        description: 'Priority level (1=Critical, 2=High, 3=Moderate, 4=Low, 5=Planning)'
+                      impact:
+                        type: string
+                        description: 'Impact level (1=High, 2=Medium, 3=Low)'
+                      category:
+                        type: string
+                        description: Incident category
+                      subcategory:
+                        type: string
+                        description: Incident subcategory
+                      assigned_to:
+                        type: object
+                        properties:
+                          link:
+                            type: string
+                          value:
+                            type: string
+                        description: User assigned to the incident
+                      opened_by:
+                        type: object
+                        properties:
+                          link:
+                            type: string
+                          value:
+                            type: string
+                        description: User who opened the incident
+                      opened_at:
+                        type: string
+                        description: Timestamp when incident was opened
+                        format: date-time
+                      updated_at:
+                        type: string
+                        description: Timestamp of last update
+                        format: date-time
+                      closed_at:
+                        type: string
+                        description: Timestamp when incident was closed
+                        format: date-time
+                      work_notes:
+                        type: string
+                        description: Work notes on the incident
+                      close_notes:
+                        type: string
+                        description: Notes about the closure
+    patch:
+      summary: Update an incident
+      description: Update an existing ServiceNow incident
+      operationId: updateTicket
+      parameters:
+        - name: sys_id
+          in: path
+          description: System ID of the incident
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                short_description:
+                  type: string
+                  description: Brief description of the incident
+                description:
+                  type: string
+                  description: Detailed description of the incident
+                state:
+                  enum:
+                    - '1'
+                    - '2'
+                    - '3'
+                    - '6'
+                    - '7'
+                  type: string
+                  description: State of the incident
+                work_notes:
+                  type: string
+                  description: Work notes to add to the incident
+                urgency:
+                  enum:
+                    - '1'
+                    - '2'
+                    - '3'
+                  type: string
+                  description: Urgency level
+                priority:
+                  enum:
+                    - '1'
+                    - '2'
+                    - '3'
+                    - '4'
+                    - '5'
+                  type: string
+                  description: Priority level
+        required: true
+      responses:
+        '200':
+          description: Incident updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    properties:
+                      sys_id:
+                        type: string
+                        description: Unique system identifier
+                      number:
+                        type: string
+                        description: 'Incident number (e.g., INC0010001)'
+                      short_description:
+                        type: string
+                        description: Brief description of the incident
+                      description:
+                        type: string
+                        description: Detailed description of the incident
+                      state:
+                        type: string
+                        description: 'Current state (1=New, 2=In Progress, 3=On Hold, 6=Resolved, 7=Closed)'
+                      urgency:
+                        type: string
+                        description: 'Urgency level (1=High, 2=Medium, 3=Low)'
+                      priority:
+                        type: string
+                        description: 'Priority level (1=Critical, 2=High, 3=Moderate, 4=Low, 5=Planning)'
+                      impact:
+                        type: string
+                        description: 'Impact level (1=High, 2=Medium, 3=Low)'
+                      category:
+                        type: string
+                        description: Incident category
+                      subcategory:
+                        type: string
+                        description: Incident subcategory
+                      assigned_to:
+                        type: object
+                        properties:
+                          link:
+                            type: string
+                          value:
+                            type: string
+                        description: User assigned to the incident
+                      opened_by:
+                        type: object
+                        properties:
+                          link:
+                            type: string
+                          value:
+                            type: string
+                        description: User who opened the incident
+                      opened_at:
+                        type: string
+                        description: Timestamp when incident was opened
+                        format: date-time
+                      updated_at:
+                        type: string
+                        description: Timestamp of last update
+                        format: date-time
+                      closed_at:
+                        type: string
+                        description: Timestamp when incident was closed
+                        format: date-time
+                      work_notes:
+                        type: string
+                        description: Work notes on the incident
+                      close_notes:
+                        type: string
+                        description: Notes about the closure
+    put:
+      summary: Close an incident
+      description: Close a ServiceNow incident by setting its state to Resolved (6) or Closed (7)
+      operationId: closeTicket
+      parameters:
+        - name: sys_id
+          in: path
+          description: System ID of the incident to close
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - state
+              type: object
+              properties:
+                state:
+                  enum:
+                    - '6'
+                    - '7'
+                  type: string
+                  description: 'State to set (6=Resolved, 7=Closed)'
+                  example: '6'
+                close_notes:
+                  type: string
+                  description: Notes about the resolution
+                  example: Issue resolved by resetting password
+                close_code:
+                  type: string
+                  description: Close code/reason
+                  example: Solved (Permanently)
+        required: true
+      responses:
+        '200':
+          description: Incident closed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: object
+                    properties:
+                      sys_id:
+                        type: string
+                        description: Unique system identifier
+                      number:
+                        type: string
+                        description: 'Incident number (e.g., INC0010001)'
+                      short_description:
+                        type: string
+                        description: Brief description of the incident
+                      description:
+                        type: string
+                        description: Detailed description of the incident
+                      state:
+                        type: string
+                        description: 'Current state (1=New, 2=In Progress, 3=On Hold, 6=Resolved, 7=Closed)'
+                      urgency:
+                        type: string
+                        description: 'Urgency level (1=High, 2=Medium, 3=Low)'
+                      priority:
+                        type: string
+                        description: 'Priority level (1=Critical, 2=High, 3=Moderate, 4=Low, 5=Planning)'
+                      impact:
+                        type: string
+                        description: 'Impact level (1=High, 2=Medium, 3=Low)'
+                      category:
+                        type: string
+                        description: Incident category
+                      subcategory:
+                        type: string
+                        description: Incident subcategory
+                      assigned_to:
+                        type: object
+                        properties:
+                          link:
+                            type: string
+                          value:
+                            type: string
+                        description: User assigned to the incident
+                      opened_by:
+                        type: object
+                        properties:
+                          link:
+                            type: string
+                          value:
+                            type: string
+                        description: User who opened the incident
+                      opened_at:
+                        type: string
+                        description: Timestamp when incident was opened
+                        format: date-time
+                      updated_at:
+                        type: string
+                        description: Timestamp of last update
+                        format: date-time
+                      closed_at:
+                        type: string
+                        description: Timestamp when incident was closed
+                        format: date-time
+                      work_notes:
+                        type: string
+                        description: Work notes on the incident
+                      close_notes:
+                        type: string
+                        description: Notes about the closure
+components:
+  securitySchemes:
+    oauth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://dev12345.service-now.com/oauth_auth.do
+          tokenUrl: https://dev12345.service-now.com/oauth_token.do
+          scopes:
+            useraccount: Access user account and incident data
+      x-ai-auth-reference-id: '{oauth2_REGISTRATION_ID}'
+security:
+  - oauth2:
+      - useraccount

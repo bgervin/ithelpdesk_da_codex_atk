@@ -29,7 +29,8 @@ provision:
     with:
       # Relative path to this file. This is the path for built zip file.
       appPackagePath: ./appPackage/build/appPackage.${{TEAMSFX_ENV}}.zip
-  # Update the app manifest to an existing app in Developer Portal.
+  # Apply the app manifest to an existing app in
+  # Developer Portal.
   # Will use the app id in manifest file to determine which app to update.
   - uses: teamsApp/update
     with:
@@ -77,4 +78,4 @@ publish:
     # the specified environment variable(s).
     writeToEnvironmentFile:
       publishedAppId: TEAMS_APP_PUBLISHED_APP_ID
-projectId: 49f99149-146f-43a7-b748-f693ef88d815
+projectId: f196ba00-17db-4b6a-b0f0-3e9efcf74ab1
