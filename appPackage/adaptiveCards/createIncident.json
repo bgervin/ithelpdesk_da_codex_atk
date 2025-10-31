@@ -1,0 +1,78 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "body": [
+    {
+      "type": "Container",
+      "style": "emphasis",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "✅ Ticket Created Successfully",
+          "weight": "bolder",
+          "size": "large",
+          "color": "good"
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "separator": true,
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "Your IT support ticket has been created.",
+          "wrap": true,
+          "size": "medium"
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "separator": true,
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "FactSet",
+          "facts": [
+            {
+              "title": "Ticket Number:",
+              "value": "**${result.number}**"
+            },
+            {
+              "title": "Description:",
+              "value": "${result.short_description}"
+            },
+            {
+              "title": "Priority:",
+              "value": "${if(result.priority == '1', '🔴 Critical', if(result.priority == '2', '🟠 High', if(result.priority == '3', '🟡 Moderate', if(result.priority == '4', '🔵 Low', '⚪ Planning'))))}"
+            },
+            {
+              "title": "Status:",
+              "value": "🆕 New"
+            },
+            {
+              "title": "Created:",
+              "value": "${formatDateTime(result.opened_at, 'MMM dd, yyyy h:mm tt')}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "An IT support specialist will review your ticket and respond soon.",
+          "wrap": true,
+          "isSubtle": true,
+          "size": "small"
+        }
+      ]
+    }
+  ]
+}

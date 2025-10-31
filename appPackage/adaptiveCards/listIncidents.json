@@ -1,0 +1,79 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "body": [
+    {
+      "type": "Container",
+      "style": "emphasis",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "📋 Your ServiceNow Tickets",
+          "weight": "bolder",
+          "size": "large",
+          "color": "accent"
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "separator": true,
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "{{if result}}{{count result}} ticket(s) found{{else}}No tickets found{{/if}}",
+          "wrap": true,
+          "size": "medium"
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "$data": "${result}",
+      "separator": true,
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "ColumnSet",
+          "columns": [
+            {
+              "type": "Column",
+              "width": "stretch",
+              "items": [
+                {
+                  "type": "TextBlock",
+                  "text": "**${number}** - ${short_description}",
+                  "wrap": true,
+                  "weight": "bolder",
+                  "size": "medium"
+                },
+                {
+                  "type": "TextBlock",
+                  "text": "Status: ${if(state == '1', '🆕 New', if(state == '2', '🔄 In Progress', if(state == '3', '⏸️ On Hold', if(state == '6', '✅ Resolved', '❌ Closed'))))}",
+                  "wrap": true,
+                  "spacing": "small"
+                },
+                {
+                  "type": "TextBlock",
+                  "text": "Priority: ${if(priority == '1', '🔴 Critical', if(priority == '2', '🟠 High', if(priority == '3', '🟡 Moderate', if(priority == '4', '🔵 Low', '⚪ Planning'))))}",
+                  "wrap": true,
+                  "spacing": "small"
+                },
+                {
+                  "type": "TextBlock",
+                  "text": "Opened: ${formatDateTime(opened_at, 'MMM dd, yyyy')}",
+                  "wrap": true,
+                  "isSubtle": true,
+                  "size": "small",
+                  "spacing": "small"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

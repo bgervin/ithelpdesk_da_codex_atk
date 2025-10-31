@@ -1,0 +1,95 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "body": [
+    {
+      "type": "Container",
+      "style": "good",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "✅ Ticket Closed",
+          "weight": "bolder",
+          "size": "large",
+          "color": "good"
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "separator": true,
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "This ticket has been successfully closed.",
+          "wrap": true,
+          "size": "medium"
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "separator": true,
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "FactSet",
+          "facts": [
+            {
+              "title": "Ticket Number:",
+              "value": "**${result.number}**"
+            },
+            {
+              "title": "Description:",
+              "value": "${result.short_description}"
+            },
+            {
+              "title": "Status:",
+              "value": "${if(result.state == '6', '✅ Resolved', '❌ Closed')}"
+            },
+            {
+              "title": "Closed:",
+              "value": "${formatDateTime(result.closed_at, 'MMM dd, yyyy h:mm tt')}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "separator": true,
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "**Resolution Notes**",
+          "weight": "bolder",
+          "spacing": "small"
+        },
+        {
+          "type": "TextBlock",
+          "text": "${if(result.close_notes, result.close_notes, 'No resolution notes provided')}",
+          "wrap": true,
+          "spacing": "small",
+          "isSubtle": true
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "Thank you for using IT Helpdesk!",
+          "wrap": true,
+          "isSubtle": true,
+          "size": "small",
+          "horizontalAlignment": "center"
+        }
+      ]
+    }
+  ]
+}

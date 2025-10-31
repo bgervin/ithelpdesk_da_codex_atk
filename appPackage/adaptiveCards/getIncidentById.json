@@ -1,0 +1,111 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "body": [
+    {
+      "type": "Container",
+      "style": "emphasis",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "🎫 Ticket Details",
+          "weight": "bolder",
+          "size": "large",
+          "color": "accent"
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "separator": true,
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "**${result.number}**",
+          "weight": "bolder",
+          "size": "large"
+        },
+        {
+          "type": "TextBlock",
+          "text": "${result.short_description}",
+          "wrap": true,
+          "size": "medium",
+          "spacing": "small"
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "separator": true,
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "FactSet",
+          "facts": [
+            {
+              "title": "Status:",
+              "value": "${if(result.state == '1', '🆕 New', if(result.state == '2', '🔄 In Progress', if(result.state == '3', '⏸️ On Hold', if(result.state == '6', '✅ Resolved', '❌ Closed'))))}"
+            },
+            {
+              "title": "Priority:",
+              "value": "${if(result.priority == '1', '🔴 Critical', if(result.priority == '2', '🟠 High', if(result.priority == '3', '🟡 Moderate', if(result.priority == '4', '🔵 Low', '⚪ Planning'))))}"
+            },
+            {
+              "title": "Category:",
+              "value": "${result.category}"
+            },
+            {
+              "title": "Opened:",
+              "value": "${formatDateTime(result.opened_at, 'MMM dd, yyyy h:mm tt')}"
+            },
+            {
+              "title": "Assigned To:",
+              "value": "${result.assigned_to.display_value}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "separator": true,
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "**Description**",
+          "weight": "bolder",
+          "spacing": "small"
+        },
+        {
+          "type": "TextBlock",
+          "text": "${result.description}",
+          "wrap": true,
+          "spacing": "small"
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "separator": true,
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "**Work Notes**",
+          "weight": "bolder",
+          "spacing": "small"
+        },
+        {
+          "type": "TextBlock",
+          "text": "${if(result.work_notes, result.work_notes, 'No work notes available')}",
+          "wrap": true,
+          "spacing": "small",
+          "isSubtle": true
+        }
+      ]
+    }
+  ]
+}

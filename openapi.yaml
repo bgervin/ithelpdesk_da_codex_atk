@@ -1,0 +1,320 @@
+openapi: 3.0.0
+info:
+  title: ServiceNow Incident API
+  description: API for managing ServiceNow incidents through IT Helpdesk Copilot
+  version: 1.0.0
+servers:
+  - url: https://dev12345.service-now.com/api/now/
+    description: ServiceNow Instance (replace dev12345 with your instance name)
+
+paths:
+  /table/incident:
+    get:
+      operationId: listIncidents
+      summary: List incidents
+      description: Retrieve a list of incidents for the authenticated user
+      parameters:
+        - name: sysparm_query
+          in: query
+          description: Query filter (e.g., assigned_to=javascript:gs.getUserID())
+          required: false
+          schema:
+            type: string
+        - name: sysparm_limit
+          in: query
+          description: Maximum number of records to return
+          required: false
+          schema:
+            type: integer
+            default: 10
+        - name: sysparm_fields
+          in: query
+          description: Comma-separated list of fields to return
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: List of incidents retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Incident'
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+      security:
+        - OAuth2: [useraccount]
+
+    post:
+      operationId: createIncident
+      summary: Create incident
+      description: Create a new ServiceNow incident
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - short_description
+              properties:
+                short_description:
+                  type: string
+                  description: Brief description of the incident
+                description:
+                  type: string
+                  description: Detailed description of the incident
+                urgency:
+                  type: string
+                  enum: ['1', '2', '3']
+                  description: Urgency level (1=High, 2=Medium, 3=Low)
+                priority:
+                  type: string
+                  enum: ['1', '2', '3', '4', '5']
+                  description: Priority level
+                category:
+                  type: string
+                  description: Incident category
+                  example: 'network'
+                subcategory:
+                  type: string
+                  description: Incident subcategory
+                  example: 'vpn'
+      responses:
+        '201':
+          description: Incident created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    $ref: '#/components/schemas/Incident'
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+      security:
+        - OAuth2: [useraccount]
+
+  /table/incident/{sys_id}:
+    get:
+      operationId: getIncidentById
+      summary: Get incident by ID
+      description: Retrieve details of a specific incident by sys_id
+      parameters:
+        - name: sys_id
+          in: path
+          required: true
+          description: System ID of the incident
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Incident details retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    $ref: '#/components/schemas/Incident'
+        '404':
+          description: Incident not found
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+      security:
+        - OAuth2: [useraccount]
+
+    patch:
+      operationId: updateIncident
+      summary: Update incident
+      description: Update fields on an existing incident
+      parameters:
+        - name: sys_id
+          in: path
+          required: true
+          description: System ID of the incident
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                short_description:
+                  type: string
+                  description: Brief description of the incident
+                description:
+                  type: string
+                  description: Detailed description of the incident
+                urgency:
+                  type: string
+                  enum: ['1', '2', '3']
+                  description: Urgency level (1=High, 2=Medium, 3=Low)
+                priority:
+                  type: string
+                  enum: ['1', '2', '3', '4', '5']
+                  description: Priority level
+                state:
+                  type: string
+                  enum: ['1', '2', '3', '6', '7']
+                  description: Incident state (1=New, 2=In Progress, 3=On Hold, 6=Resolved, 7=Closed)
+                work_notes:
+                  type: string
+                  description: Work notes to add to the incident
+      responses:
+        '200':
+          description: Incident updated successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    $ref: '#/components/schemas/Incident'
+        '404':
+          description: Incident not found
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+      security:
+        - OAuth2: [useraccount]
+
+    put:
+      operationId: closeIncident
+      summary: Close incident
+      description: Mark an incident as resolved/closed
+      parameters:
+        - name: sys_id
+          in: path
+          required: true
+          description: System ID of the incident
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - state
+              properties:
+                state:
+                  type: string
+                  enum: ['6', '7']
+                  description: State to set (6=Resolved, 7=Closed)
+                close_code:
+                  type: string
+                  description: Reason for closure
+                  example: 'Solved (Permanently)'
+                close_notes:
+                  type: string
+                  description: Notes about the resolution
+      responses:
+        '200':
+          description: Incident closed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  result:
+                    $ref: '#/components/schemas/Incident'
+        '404':
+          description: Incident not found
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Internal server error
+      security:
+        - OAuth2: [useraccount]
+
+components:
+  securitySchemes:
+    OAuth2:
+      type: oauth2
+      flows:
+        authorizationCode:
+          authorizationUrl: https://YOUR_INSTANCE.service-now.com/oauth_auth.do
+          tokenUrl: https://YOUR_INSTANCE.service-now.com/oauth_token.do
+          scopes:
+            useraccount: Read/Write ServiceNow incidents
+
+  schemas:
+    Incident:
+      type: object
+      properties:
+        sys_id:
+          type: string
+          description: Unique system identifier
+        number:
+          type: string
+          description: Incident number (e.g., INC0010001)
+        short_description:
+          type: string
+          description: Brief description of the incident
+        description:
+          type: string
+          description: Detailed description
+        state:
+          type: string
+          description: Current state of the incident
+          enum: ['1', '2', '3', '6', '7']
+        priority:
+          type: string
+          description: Priority level
+          enum: ['1', '2', '3', '4', '5']
+        urgency:
+          type: string
+          description: Urgency level
+          enum: ['1', '2', '3']
+        category:
+          type: string
+          description: Incident category
+        subcategory:
+          type: string
+          description: Incident subcategory
+        assigned_to:
+          type: object
+          properties:
+            display_value:
+              type: string
+            link:
+              type: string
+        opened_at:
+          type: string
+          format: date-time
+          description: When the incident was opened
+        closed_at:
+          type: string
+          format: date-time
+          description: When the incident was closed
+        work_notes:
+          type: string
+          description: Work notes
+        close_notes:
+          type: string
+          description: Resolution notes
+
+security:
+  - OAuth2: [useraccount]
