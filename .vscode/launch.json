@@ -39,10 +39,9 @@
             "runtimeArgs": ["atk", "preview", "--env", "local"],
             "cwd": "${workspaceFolder}",
             "env": {
-                "OPENAPI_URL": "http://localhost:${env:SPEC_SERVER_PORT}/openapi.local.yaml",
+                "OPENAPI_URL": "${env:OPENAPI_URL}",
                 "API_HOST": "${env:API_HOST}",
                 "API_PORT": "${env:API_PORT}",
-                "SPEC_SERVER_PORT": "${env:SPEC_SERVER_PORT}",
                 "SERVICENOW_INSTANCE": "${env:SERVICENOW_INSTANCE}",
                 "SERVICENOW_BASE_URL_PROD": "${env:SERVICENOW_BASE_URL_PROD}"
             },

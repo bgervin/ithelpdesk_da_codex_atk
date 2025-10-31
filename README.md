@@ -70,17 +70,15 @@ For local development and testing without a live ServiceNow instance, you can us
    \`\`\`bash
    API_HOST=localhost
    API_PORT=4010
-   SPEC_SERVER_PORT=8081
-   OPENAPI_URL=http://localhost:8081/openapi.local.yaml
+   OPENAPI_URL=apiSpecificationFile/openapi.local.yaml
    SERVICENOW_INSTANCE=your-instance
    \`\`\`
 3. Press **F5** or select **"Launch Agent + Prism"** from the debug menu
 
 This will automatically:
-- Generate a localized OpenAPI spec (`.tmp/openapi.local.yaml`)
+- Generate a localized OpenAPI spec (`appPackage/apiSpecificationFile/openapi.local.yaml`)
 - Convert any CSV files in `data/` to JSON examples
 - Start the Prism mock server on `http://localhost:4010`
-- Start a static file server for the OpenAPI spec on `http://localhost:8081`
 - Launch the agent with the local configuration
 
 #### Option 2: Manual Commands
@@ -102,12 +100,7 @@ Run these commands in separate terminal windows:
    npm run mock:start
    \`\`\`
 
-4. **Start OpenAPI spec server**
-   \`\`\`bash
-   npm run spec:serve
-   \`\`\`
-
-5. **Preview the agent**
+4. **Preview the agent**
    \`\`\`bash
    atk preview --env local
    \`\`\`
@@ -382,9 +375,9 @@ The agent uses Adaptive Cards for rich UI. Card templates are in \`appPackage/ad
 ### Local Development (Prism Mock)
 
 When developing locally with the Prism mock server:
-- **OpenAPI Spec**: `.tmp/openapi.local.yaml` (auto-generated from `openapi.yaml`)
+- **OpenAPI Spec**: `appPackage/apiSpecificationFile/openapi.local.yaml` (auto-generated from `openapi.yaml`)
 - **API Base URL**: `http://localhost:4010` (Prism mock server)
-- **Spec URL**: `http://localhost:8081/openapi.local.yaml` (served by http-server)
+- **Spec URL**: `apiSpecificationFile/openapi.local.yaml` (relative path in app package)
 - **Authentication**: Not required for mock server
 - **Data**: Served from generated examples or Prism's auto-generated responses
 
@@ -398,7 +391,7 @@ When deploying to production:
 - **Data**: Live ServiceNow incident data
 
 The `ai-plugin.json` uses the `OPENAPI_URL` environment variable to switch between local and production specs:
-- **Local**: Set `OPENAPI_URL=http://localhost:8081/openapi.local.yaml`
+- **Local**: Set `OPENAPI_URL=apiSpecificationFile/openapi.local.yaml`
 - **Production**: Leave `OPENAPI_URL` unset (defaults to `apiSpecificationFile/openapi.yaml`)
 
 ---

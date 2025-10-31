@@ -4,8 +4,7 @@
   "description": "IT Helpdesk M365 Copilot Declarative Agent with ServiceNow integration",
   "type": "module",
   "scripts": {
-    "mock:start": "prism mock ./.tmp/openapi.local.yaml --port $API_PORT",
-    "spec:serve": "http-server -p $SPEC_SERVER_PORT -c-1 ./.tmp",
+    "mock:start": "prism mock ./appPackage/apiSpecificationFile/openapi.local.yaml --port $API_PORT",
     "spec:local": "node ./scripts/make-local-spec.mjs",
     "seed:examples": "node ./scripts/seed/seed-examples.mjs",
     "dev": "echo \"Replace with your agent run command (e.g., 'atk preview --env local')\""
@@ -21,7 +20,6 @@
   "devDependencies": {
     "@stoplight/prism-cli": "^5.9.0",
     "csv-parse": "^5.5.0",
-    "http-server": "^14.1.1",
     "js-yaml": "^4.1.0"
   }
 }
