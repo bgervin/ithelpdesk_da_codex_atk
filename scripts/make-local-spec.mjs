@@ -8,7 +8,7 @@ const HOST = process.env.API_HOST || "localhost";
 const PORT = process.env.API_PORT || "4010";
 const URL  = `http://${HOST}:${PORT}`;
 
-const doc = yaml.load(fs.readFileSync(OPENAPI_IN, "utf8"));
+const doc = yaml.load(fs.readFileSync(OPENAPI_IN, "utf8"), { schema: yaml.DEFAULT_SCHEMA });
 
 // Overwrite servers for local dev (Prism base URL)
 doc.servers = [{ url: URL }];

@@ -8,7 +8,7 @@
     "spec:serve": "http-server -p $SPEC_SERVER_PORT -c-1 ./.tmp",
     "spec:local": "node ./scripts/make-local-spec.mjs",
     "seed:examples": "node ./scripts/seed/seed-examples.mjs",
-    "dev": "echo \"Replace with your agent run command (e.g., 'atk preview --env local')\" && exit 1"
+    "dev": "echo \"Replace with your agent run command (e.g., 'atk preview --env local')\""
   },
   "keywords": [
     "m365",

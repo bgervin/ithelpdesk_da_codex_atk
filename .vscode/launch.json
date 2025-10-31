@@ -35,8 +35,8 @@
             "name": "Launch Agent + Prism",
             "type": "node",
             "request": "launch",
-            "program": "${workspaceFolder}/node_modules/.bin/atk",
-            "args": ["preview", "--env", "local"],
+            "runtimeExecutable": "npx",
+            "runtimeArgs": ["atk", "preview", "--env", "local"],
             "cwd": "${workspaceFolder}",
             "env": {
                 "OPENAPI_URL": "http://localhost:${env:SPEC_SERVER_PORT}/openapi.local.yaml",

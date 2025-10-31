@@ -7,9 +7,11 @@ echo "🧪 Testing Local Development Setup"
 echo "=================================="
 echo ""
 
-# Load environment variables
+# Load environment variables safely
 if [ -f .env ]; then
-    export $(cat .env | grep -v '^#' | xargs)
+    set -a
+    source .env
+    set +a
 fi
 
 # Set defaults if not set
@@ -115,7 +117,8 @@ echo ""
 
 # Cleanup
 echo "🧹 Cleaning up..."
-kill $PRISM_PID $SPEC_PID 2>/dev/null || true
+[ -n "$PRISM_PID" ] && kill $PRISM_PID 2>/dev/null || true
+[ -n "$SPEC_PID" ] && kill $SPEC_PID 2>/dev/null || true
 echo "✅ Stopped all background processes"
 echo ""
 
