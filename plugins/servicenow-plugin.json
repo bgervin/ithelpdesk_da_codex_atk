@@ -1,0 +1,45 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/copilot/plugin/v2.1/schema.json",
+  "schema_version": "v2.1",
+  "id": "servicenow-plugin",
+  "name": "ServiceNow Incident Management",
+  "description": "Plugin for managing ServiceNow incidents (tickets) including create, update, close, and list operations",
+  "namespace": "servicenow",
+  "api": {
+    "type": "openapi",
+    "url": "servicenow-openapi.yaml"
+  },
+  "auth": {
+    "type": "OAuthPluginVault",
+    "reference_id": "${{SERVICENOW_OAUTH_CONFIG_ID}}"
+  },
+  "runtime": {
+    "type": "OpenApi",
+    "spec": {
+      "url": "servicenow-openapi.yaml"
+    },
+    "run_for_functions": [
+      "listMyTickets",
+      "createTicket",
+      "getTicket",
+      "updateTicket",
+      "closeTicket"
+    ]
+  },
+  "capabilities": {
+    "conversation_starters": [
+      {
+        "text": "Create a ticket for my laptop issue"
+      },
+      {
+        "text": "Show me my open tickets"
+      },
+      {
+        "text": "Update ticket INC0010001"
+      },
+      {
+        "text": "Close ticket INC0010001"
+      }
+    ]
+  }
+}

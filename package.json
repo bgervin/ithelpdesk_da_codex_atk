@@ -1,0 +1,33 @@
+{
+  "name": "ithelpdesk-da-codex-atk",
+  "version": "1.0.0",
+  "description": "M365 Copilot declarative agent for IT Helpdesk with ServiceNow integration",
+  "main": "index.js",
+  "scripts": {
+    "package": "node scripts/package.js",
+    "validate:openapi": "node scripts/validate-openapi.js",
+    "validate:cards": "node scripts/validate-cards.js",
+    "test": "echo \"Run test flows as described in docs/TEST_FLOWS.md\""
+  },
+  "keywords": [
+    "m365",
+    "copilot",
+    "declarative-agent",
+    "servicenow",
+    "teams",
+    "adaptive-cards",
+    "it-helpdesk"
+  ],
+  "author": "IT Helpdesk Team",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bgervin/ithelpdesk_da_codex_atk.git"
+  },
+  "devDependencies": {
+    "@microsoft/teamsfx-cli": "^2.1.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

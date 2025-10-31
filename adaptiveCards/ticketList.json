@@ -1,0 +1,102 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "body": [
+    {
+      "type": "TextBlock",
+      "text": "Your Open Tickets",
+      "weight": "Bolder",
+      "size": "Large"
+    },
+    {
+      "type": "TextBlock",
+      "text": "You have ${count(tickets)} open ticket(s)",
+      "spacing": "Small",
+      "isSubtle": true
+    },
+    {
+      "type": "Container",
+      "separator": true,
+      "spacing": "Medium",
+      "$data": "${tickets}",
+      "items": [
+        {
+          "type": "ColumnSet",
+          "spacing": "Medium",
+          "separator": true,
+          "columns": [
+            {
+              "type": "Column",
+              "width": "100px",
+              "items": [
+                {
+                  "type": "TextBlock",
+                  "text": "${number}",
+                  "weight": "Bolder",
+                  "wrap": true
+                }
+              ]
+            },
+            {
+              "type": "Column",
+              "width": "stretch",
+              "items": [
+                {
+                  "type": "TextBlock",
+                  "text": "${short_description}",
+                  "wrap": true
+                },
+                {
+                  "type": "TextBlock",
+                  "text": "Priority: ${priority} | Opened: ${formatDateTime(opened_at, 'yyyy-MM-dd')}",
+                  "size": "Small",
+                  "isSubtle": true,
+                  "spacing": "Small",
+                  "wrap": true
+                }
+              ]
+            },
+            {
+              "type": "Column",
+              "width": "auto",
+              "items": [
+                {
+                  "type": "TextBlock",
+                  "text": "${state}",
+                  "color": "${if(state == 'New', 'Attention', if(state == 'In Progress', 'Good', 'Default'))}",
+                  "weight": "Bolder",
+                  "horizontalAlignment": "Right"
+                }
+              ]
+            }
+          ],
+          "selectAction": {
+            "type": "Action.Submit",
+            "data": {
+              "action": "viewTicket",
+              "sys_id": "${sys_id}",
+              "number": "${number}"
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "type": "Action.Submit",
+      "title": "Create New Ticket",
+      "data": {
+        "action": "createTicket"
+      }
+    },
+    {
+      "type": "Action.Submit",
+      "title": "Refresh List",
+      "data": {
+        "action": "refreshTickets"
+      }
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+
+# Node modules
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build artifacts
+dist/
+build/
+*.zip
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Teams Toolkit
+.fx/
+.localConfigs
+env/.env.*
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Logs
+logs/
+*.log
+
+# App package (generated)
+*.zip
+
+# Actual icon files (keep placeholders)
+appPackage/color.png
+appPackage/outline.png
+
+# OS files
+Thumbs.db
+.DS_Store
