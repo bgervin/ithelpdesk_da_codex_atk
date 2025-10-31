@@ -377,6 +377,32 @@ The agent uses Adaptive Cards for rich UI. Card templates are in \`appPackage/ad
 
 ---
 
+## 🔄 Local vs Production Configuration
+
+### Local Development (Prism Mock)
+
+When developing locally with the Prism mock server:
+- **OpenAPI Spec**: `.tmp/openapi.local.yaml` (auto-generated from `openapi.yaml`)
+- **API Base URL**: `http://localhost:4010` (Prism mock server)
+- **Spec URL**: `http://localhost:8081/openapi.local.yaml` (served by http-server)
+- **Authentication**: Not required for mock server
+- **Data**: Served from generated examples or Prism's auto-generated responses
+
+### Production (ServiceNow)
+
+When deploying to production:
+- **OpenAPI Spec**: `appPackage/apiSpecificationFile/openapi.yaml` (canonical file)
+- **API Base URL**: `https://{SERVICENOW_INSTANCE}.service-now.com/api/now/`
+- **Spec URL**: `apiSpecificationFile/openapi.yaml` (relative path in app package)
+- **Authentication**: OAuth 2.0 via ServiceNow
+- **Data**: Live ServiceNow incident data
+
+The `ai-plugin.json` uses the `OPENAPI_URL` environment variable to switch between local and production specs:
+- **Local**: Set `OPENAPI_URL=http://localhost:8081/openapi.local.yaml`
+- **Production**: Leave `OPENAPI_URL` unset (defaults to `apiSpecificationFile/openapi.yaml`)
+
+---
+
 ## 🚀 Deployment
 
 ### Deploy to Microsoft 365
