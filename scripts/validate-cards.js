@@ -54,7 +54,10 @@ cardFiles.forEach(file => {
     const checks = [
       {
         name: 'Has $schema',
-        test: () => card.$schema && card.$schema.includes('adaptivecards.io'),
+        test: () => card.$schema && (
+          card.$schema.startsWith('http://adaptivecards.io/') || 
+          card.$schema.startsWith('https://adaptivecards.io/')
+        ),
         message: 'Should have $schema property pointing to adaptivecards.io'
       },
       {
