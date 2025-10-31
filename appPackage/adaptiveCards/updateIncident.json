@@ -1,0 +1,74 @@
+{
+  "$schema": "http://adaptivecards.io/schemas/adaptive-card.json",
+  "type": "AdaptiveCard",
+  "version": "1.5",
+  "body": [
+    {
+      "type": "Container",
+      "style": "emphasis",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "🔄 Ticket Updated",
+          "weight": "bolder",
+          "size": "large",
+          "color": "accent"
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "separator": true,
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "Your ticket has been updated successfully.",
+          "wrap": true,
+          "size": "medium"
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "separator": true,
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "FactSet",
+          "facts": [
+            {
+              "title": "Ticket Number:",
+              "value": "**${result.number}**"
+            },
+            {
+              "title": "Description:",
+              "value": "${result.short_description}"
+            },
+            {
+              "title": "Status:",
+              "value": "${if(result.state == '1', '🆕 New', if(result.state == '2', '🔄 In Progress', if(result.state == '3', '⏸️ On Hold', if(result.state == '6', '✅ Resolved', '❌ Closed'))))}"
+            },
+            {
+              "title": "Priority:",
+              "value": "${if(result.priority == '1', '🔴 Critical', if(result.priority == '2', '🟠 High', if(result.priority == '3', '🟡 Moderate', if(result.priority == '4', '🔵 Low', '⚪ Planning'))))}"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "Container",
+      "spacing": "medium",
+      "items": [
+        {
+          "type": "TextBlock",
+          "text": "The changes have been saved to your ServiceNow ticket.",
+          "wrap": true,
+          "isSubtle": true,
+          "size": "small"
+        }
+      ]
+    }
+  ]
+}

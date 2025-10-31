@@ -1,0 +1,109 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/copilot/plugin/v2.1/schema.json",
+    "schema_version": "v2.1",
+    "name_for_human": "ServiceNow Incident API",
+    "description_for_human": "API for managing ServiceNow incidents through IT Helpdesk Copilot",
+    "description_for_model": "API for managing ServiceNow incidents through IT Helpdesk Copilot",
+    "contact_email": "publisher-email@example.com",
+    "namespace": "servicenowagent",
+    "capabilities": {
+        "conversation_starters": [
+            {
+                "text": "List incidents"
+            },
+            {
+                "text": "Create incident"
+            },
+            {
+                "text": "Get incident by ID"
+            },
+            {
+                "text": "Update incident"
+            },
+            {
+                "text": "Close incident"
+            }
+        ]
+    },
+    "functions": [
+        {
+            "name": "closeIncident",
+            "description": "Mark an incident as resolved/closed",
+            "capabilities": {
+                "response_semantics": {
+                    "data_path": "$",
+                    "static_template": {
+                        "file": "./adaptiveCards/closeIncident.json"
+                    }
+                }
+            }
+        },
+        {
+            "name": "createIncident",
+            "description": "Create a new ServiceNow incident",
+            "capabilities": {
+                "response_semantics": {
+                    "data_path": "$",
+                    "static_template": {
+                        "file": "./adaptiveCards/createIncident.json"
+                    }
+                }
+            }
+        },
+        {
+            "name": "getIncidentById",
+            "description": "Retrieve details of a specific incident by sys_id",
+            "capabilities": {
+                "response_semantics": {
+                    "data_path": "$",
+                    "static_template": {
+                        "file": "./adaptiveCards/getIncidentById.json"
+                    }
+                }
+            }
+        },
+        {
+            "name": "listIncidents",
+            "description": "Retrieve a list of incidents for the authenticated user",
+            "capabilities": {
+                "response_semantics": {
+                    "data_path": "$",
+                    "static_template": {
+                        "file": "./adaptiveCards/listIncidents.json"
+                    }
+                }
+            }
+        },
+        {
+            "name": "updateIncident",
+            "description": "Update fields on an existing incident",
+            "capabilities": {
+                "response_semantics": {
+                    "data_path": "$",
+                    "static_template": {
+                        "file": "./adaptiveCards/updateIncident.json"
+                    }
+                }
+            }
+        }
+    ],
+    "runtimes": [
+        {
+            "type": "OpenApi",
+            "auth": {
+                "type": "OAuthPluginVault",
+                "reference_id": "${{OAUTH2_REGISTRATION_ID}}"
+            },
+            "spec": {
+                "url": "apiSpecificationFile/openapi.yaml"
+            },
+            "run_for_functions": [
+                "listIncidents",
+                "createIncident",
+                "getIncidentById",
+                "updateIncident",
+                "closeIncident"
+            ]
+        }
+    ]
+}

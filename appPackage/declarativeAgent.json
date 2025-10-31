@@ -1,0 +1,37 @@
+{
+    "$schema": "https://developer.microsoft.com/json-schemas/copilot/declarative-agent/v1.5/schema.json",
+    "version": "v1.5",
+    "name": "IT Helpdesk Agent",
+    "description": "IT Helpdesk Copilot that helps with troubleshooting IT issues and managing ServiceNow tickets",
+    "instructions": "$[file('instruction.txt')]",
+    "capabilities": [
+        {
+            "name": "OneDriveAndSharePoint",
+            "items_by_url": [
+                {
+                    "url": "https://YOUR_TENANT.sharepoint.com/sites/ITHelp/Shared%20Documents/Knowledge"
+                }
+            ]
+        }
+    ],
+    "actions": [
+        {
+            "id": "action_1",
+            "file": "ai-plugin.json"
+        }
+    ],
+    "conversation_starters": [
+        {
+            "text": "Show my open ServiceNow tickets"
+        },
+        {
+            "text": "Create a new IT ticket for a broken VPN connection"
+        },
+        {
+            "text": "How do I reset my password?"
+        },
+        {
+            "text": "Close my resolved tickets"
+        }
+    ]
+}
